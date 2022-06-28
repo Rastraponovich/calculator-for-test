@@ -17,6 +17,7 @@ const calc = (state: CalculatorState) => {
     if (state.currntOperation === "/") return state.currentValue / state.displayedValue!
 
     if (state.currntOperation === "–") return state.currentValue - state.displayedValue!
+    if (state.currntOperation === "=") return state.currentValue
 }
 const initialState: CalculatorState = {
     endCalculation: false,
@@ -63,17 +64,17 @@ const calculatorSlice = createSlice({
 
         setCurrentOperation(state, action) {
             state.currntOperation = action.payload
+            state.endCalculation = true
+            state.currentValue = state.displayedValue!
         },
 
-        execOperation(state, action: PayloadAction<Operation>) {
-            if (state.currntOperation && isOperation(state.currntOperation)) {
+        execOperation(state) {
+            if (state.currntOperation && !state.endCalculation) {
                 state.currentValue = calc(state)!
                 state.displayedValue = state.currentValue
-            } else {
-                state.currentValue = state.displayedValue!
+                state.currntOperation = undefined
+                state.endCalculation = true
             }
-            state.currntOperation = action.payload
-            state.endCalculation = true
         },
         toggleComma(state) {
             state.enabledComma = !state.enabledComma

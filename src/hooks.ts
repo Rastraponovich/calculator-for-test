@@ -5,7 +5,6 @@ import {
     addNumber,
     changeSign,
     execOperation,
-    calculate,
     toggleComma,
     removeLastNumber,
     reset,
@@ -36,17 +35,9 @@ export function useDelete() {
     }, [dispatch])
 }
 
-export function useDivide() {
-    const dispatch = useDispatch()
-
-    return useCallback(() => {
-        // dispatch(setCurrentOperation("/"));
-        dispatch(execOperation("/"))
-    }, [dispatch])
-}
-
 export function useNumber() {
     const dispatch = useDispatch()
+
     return useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
             dispatch(addNumber(e.currentTarget.innerText))
@@ -60,12 +51,20 @@ export function useMultiply() {
 
     return useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
-            // dispatch(setCurrentOperation("x"));
+            dispatch(execOperation())
 
-            dispatch(execOperation("x"))
+            dispatch(setCurrentOperation("x"))
         },
         [dispatch]
     )
+}
+export function useDivide() {
+    const dispatch = useDispatch()
+
+    return useCallback(() => {
+        dispatch(execOperation())
+        dispatch(setCurrentOperation("/"))
+    }, [dispatch])
 }
 
 export function useMinus() {
@@ -73,9 +72,8 @@ export function useMinus() {
 
     return useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
-            // dispatch(setCurrentOperation("–"));
-
-            dispatch(execOperation("–"))
+            dispatch(execOperation())
+            dispatch(setCurrentOperation("–"))
         },
         [dispatch]
     )
@@ -83,11 +81,11 @@ export function useMinus() {
 
 export function usePlus() {
     const dispatch = useDispatch()
+
     return useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
-            // dispatch(setCurrentOperation("+"));
-
-            dispatch(execOperation("+"))
+            dispatch(execOperation())
+            dispatch(setCurrentOperation("+"))
         },
         [dispatch]
     )
@@ -95,9 +93,10 @@ export function usePlus() {
 
 export function useCalculate() {
     const dispatch = useDispatch()
+
     return useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
-            dispatch(calculate())
+            dispatch(execOperation())
         },
         [dispatch]
     )
